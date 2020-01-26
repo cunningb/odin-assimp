@@ -99,6 +99,14 @@ foreign lib {
     @(link_name="aiGetMaterialString")                  get_material_string :: proc(mat: ^Material, key: cstring, texture_type: UInt, index: UInt, string_out: ^String) -> Return ---;
     @(link_name="aiGetMaterialTextureCount")            get_material_texture_count :: proc(mat: ^Material, texture_type: ^Texture_Type) -> UInt ---;
     @(link_name="aiGetMaterialTexture")                 get_material_texture :: proc(mat: ^Material, texture_type: ^Texture_Type, index: UInt, path: ^String, mapping: ^Texture_Mapping, uvindex: ^UInt, blend: ^Real, op: ^Texture_Op, mapmode: ^Texture_Map_Mode, flags: ^UInt) -> Return ---;
+
+    // version.h
+    @(link_name="aiGetLegalString")         get_legal_string :: proc() -> cstring ---;
+    @(link_name="aiGetVersionMinor")        get_version_minor :: proc() -> UInt ---;
+    @(link_name="aiGetVersionMajor")        get_version_major :: proc() -> UInt ---;
+    @(link_name="aiGetVersionRevision")     get_branch_revision :: proc() -> UInt ---;
+    @(link_name="aiGetBranchName")          get_branch_name :: proc() -> cstring ---;
+    @(link_name="aiGetCompileFlags")        get_compile_flags :: proc() -> UInt ---;
 }
 
 // Wrapper for C Vectors
