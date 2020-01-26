@@ -44,7 +44,7 @@ UChar :: c.uchar;
 @(default_calling_convention="c")
 foreign lib {
 
-    // cfileio.h
+    // cimport.h
     @(link_name="aiImportFile")                         import_file :: proc(file_name: cstring, flags: UInt) -> ^Scene ---;
     @(link_name="aiImportFileEx")                       import_file_ex :: proc(file_name: cstring, flags: UInt, file_io: ^File_IO) -> ^Scene ---;
     @(link_name="aiImportFileExWithProperties")         import_file_ex_with_properties :: proc(file_name: cstring, flags: UInt, file_io: ^File_IO, property_store: ^Property_Store) -> ^Scene ---;
@@ -107,6 +107,9 @@ foreign lib {
     @(link_name="aiGetVersionRevision")     get_branch_revision :: proc() -> UInt ---;
     @(link_name="aiGetBranchName")          get_branch_name :: proc() -> cstring ---;
     @(link_name="aiGetCompileFlags")        get_compile_flags :: proc() -> UInt ---;
+
+    // importerdesc.h
+    @(link_name="aiGetImporterDesc")        get_importer_desc :: proc(extension: cstring) -> ^Importer_Desc ---;
 }
 
 // Wrapper for C Vectors
@@ -178,6 +181,36 @@ C_Vector :: struct(Data: typeid) {
         sentinal: Char
     }
 // ----- End cimport.h
+
+
+//#include "importerdesc.h"
+// ------------------------------------------------------------
+    Importer_Flags :: enum {
+        Support_Text_Flavour = 0x1,
+        Support_Binary_Flavour = 0x2,
+        Support_Compressed_Flavour = 0x4,
+        Limited_Support = 0x8,
+        Experimental = 0x10
+    }
+
+    Importer_Desc :: struct {
+        name: cstring,
+        author: cstring,
+        maintainer: cstring,
+        comments: cstring,
+        flags: UInt,
+
+        min_major: UInt,
+        min_minor: UInt,
+
+        max_major: UInt,
+        max_minor: UInt,
+
+        file_extensions: cstring
+    }
+// ----- End importerdesc.h
+
+
 
 
 //#include "types.h"
