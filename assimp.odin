@@ -13,7 +13,7 @@ when os.OS == "windows" do foreign import lib "assimp-vc141-mt.lib";
 // ------------------------------------------------------------
     // helper proc for slicing a vector back to odin
     slice_vector :: inline proc(c_vector: C_Vector($T)) -> []T {
-        return mem.slice_ptr(c_vector.length, c_vector.data);
+        return mem.slice_ptr(c_vector.data, int(c_vector.length));
     }
 
     // helper proc for converting an assimp.String to an odin string
