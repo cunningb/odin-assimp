@@ -10,17 +10,15 @@ when os.OS == "windows" do foreign import lib "assimp-vc141-mt.lib";
 
 // Helpers
 // ------------------------------------------------------------
+    // helper proc for slicing a vector back to odin
+    slice_vector :: inline proc(c_vector: C_Vector($T)) -> []T {
+        return mem.slice_ptr(c_vector.length, c_vector.data);
+    }
 
-// helper proc for slicing a vector back to odin
-slice_vector :: inline proc(c_vector: C_Vector($T)) -> []T {
-    return mem.slice_ptr(c_vector.length, c_vector.data);
-}
-
-// helper proc for converting an assimp.String to an odin string
-string_to_string :: inline proc(str: ^String) -> string {
-    return strings.string_from_ptr(&str.data[0], int(str.length));
-}
-
+    // helper proc for converting an assimp.String to an odin string
+    string_to_string :: inline proc(str: ^String) -> string {
+        return strings.string_from_ptr(&str.data[0], int(str.length));
+    }
 // ----- End Helpers
 
 HINT_MAX_TEXTURE_LEN :: 9;
@@ -115,15 +113,15 @@ foreign lib {
 // Wrapper for C Vectors
 C_Vector :: struct(Data: typeid) {
     length: UInt,
-    data: ^Data
+    data:   ^Data
 }
 
 
 //#include "cexport.h"
 // ------------------------------------------------------------
     Export_Format_Desc :: struct {
-        id: cstring,
-        description: cstring,
+        id:             cstring,
+        description:    cstring,
         file_extension: cstring
     }
 
@@ -139,14 +137,14 @@ C_Vector :: struct(Data: typeid) {
 
 //#include "cfileio.h"
 // ------------------------------------------------------------
-    Open_Proc   :: proc(file_io: ^File_IO, str1: cstring, str2: cstring) -> ^File;
-    Close_Proc  :: proc(file_io: ^File_IO, file: ^File);
+    Open_Proc   :: proc"c"(file_io: ^File_IO, str1: cstring, str2: cstring) -> ^File;
+    Close_Proc  :: proc"c"(file_io: ^File_IO, file: ^File);
 
-    Write_Proc  :: proc(file: ^File, str: cstring, st1: c.size_t, st2: c.size_t) -> c.size_t;
-    Read_Proc   :: proc(file: ^File, str: cstring, st1: c.size_t, st2: c.size_t) -> c.size_t;
-    Tell_Proc   :: proc(file: ^File) -> c.size_t;
-    Flush_Proc  :: proc(file: ^File);
-    Seek_Proc   :: proc(file: ^File, st1: c.size_t, origin: Origin) -> Return;
+    Write_Proc  :: proc"c"(file: ^File, str: cstring, st1: c.size_t, st2: c.size_t) -> c.size_t;
+    Read_Proc   :: proc"c"(file: ^File, str: cstring, st1: c.size_t, st2: c.size_t) -> c.size_t;
+    Tell_Proc   :: proc"c"(file: ^File) -> c.size_t;
+    Flush_Proc  :: proc"c"(file: ^File);
+    Seek_Proc   :: proc"c"(file: ^File, st1: c.size_t, origin: Origin) -> Return;
 
     User_Data :: cstring;
 
@@ -170,11 +168,11 @@ C_Vector :: struct(Data: typeid) {
 
 //#include "cimport.h"
 // ------------------------------------------------------------
-    Log_Stream_Callback :: proc(message: cstring, user: cstring);
+    Log_Stream_Callback :: proc"c"(message: cstring, user: cstring);
 
     Log_Stream :: struct {
-        callback: Log_Stream_Callback,
-        user: cstring
+        callback:   Log_Stream_Callback,
+        user:       cstring
     }
 
     Property_Store :: struct {
@@ -194,11 +192,11 @@ C_Vector :: struct(Data: typeid) {
     }
 
     Importer_Desc :: struct {
-        name: cstring,
-        author: cstring,
+        name:       cstring,
+        author:     cstring,
         maintainer: cstring,
-        comments: cstring,
-        flags: UInt,
+        comments:   cstring,
+        flags:      UInt,
 
         min_major: UInt,
         min_minor: UInt,
