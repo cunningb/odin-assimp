@@ -44,7 +44,7 @@ UChar :: c.uchar;
 foreign lib {
 
     // cimport.h
-    @(link_name="aiImportFile")                         import_file :: proc(file_name: cstring, flags: UInt) -> ^Scene ---;
+    @(link_name="aiImportFile")                         import_file :: proc(file_name: cstring, flags: Post_Process_Steps) -> ^Scene ---;
     @(link_name="aiImportFileEx")                       import_file_ex :: proc(file_name: cstring, flags: UInt, file_io: ^File_IO) -> ^Scene ---;
     @(link_name="aiImportFileExWithProperties")         import_file_ex_with_properties :: proc(file_name: cstring, flags: UInt, file_io: ^File_IO, property_store: ^Property_Store) -> ^Scene ---;
     @(link_name="aiImportFileFromMemory")               import_file_from_memory :: proc(buffer: ^Char, length: UInt, flags: UInt, hint: cstring) -> ^Scene ---;
@@ -90,12 +90,12 @@ foreign lib {
     @(link_name="aiReleaseExportBlob")                  release_export_to_blob :: proc(data: ^Export_Blob_Data) ---;
 
     // material.h
-    @(link_name="aiGetMaterialProperty")                get_material_property :: proc(mat: ^Material, key: cstring, texture_type: UInt, index: UInt, material_property_out: ^^Material_Property) -> Return ---;
-    @(link_name="aiGetMaterialFloatArray")              get_material_float_array :: proc(mat: ^Material, key: cstring, texture_type: UInt, index: UInt, float_array_out: ^Real, max: ^UInt) -> Return ---;
-    @(link_name="aiGetMaterialIntegerArray")            get_material_integer_array :: proc(mat: ^Material, key: cstring, texture_type: UInt, index: UInt, integer_array_out: ^c.int, max: ^UInt) -> Return ---;
-    @(link_name="aiGetMaterialColor")                   get_material_color :: proc(mat: ^Material, key: cstring, texture_type: UInt, index: UInt, color_out: Color_4d) -> Return ---;
-    @(link_name="aiGetMaterialUVTransform")             get_material_uv_transform :: proc(mat: ^Material, key: cstring, texture_type: UInt, index: UInt, uv_transform_out: ^UV_Transform) -> Return ---;
-    @(link_name="aiGetMaterialString")                  get_material_string :: proc(mat: ^Material, key: cstring, texture_type: UInt, index: UInt, string_out: ^String) -> Return ---;
+    @(link_name="aiGetMaterialProperty")                get_material_property :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, material_property_out: ^^Material_Property) -> Return ---;
+    @(link_name="aiGetMaterialFloatArray")              get_material_float_array :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, float_array_out: ^Real, max: ^UInt) -> Return ---;
+    @(link_name="aiGetMaterialIntegerArray")            get_material_integer_array :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, integer_array_out: ^c.int, max: ^UInt) -> Return ---;
+    @(link_name="aiGetMaterialColor")                   get_material_color :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, color_out: Color_4d) -> Return ---;
+    @(link_name="aiGetMaterialUVTransform")             get_material_uv_transform :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, uv_transform_out: ^UV_Transform) -> Return ---;
+    @(link_name="aiGetMaterialString")                  get_material_string :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, string_out: ^String) -> Return ---;
     @(link_name="aiGetMaterialTextureCount")            get_material_texture_count :: proc(mat: ^Material, texture_type: ^Texture_Type) -> UInt ---;
     @(link_name="aiGetMaterialTexture")                 get_material_texture :: proc(mat: ^Material, texture_type: ^Texture_Type, index: UInt, path: ^String, mapping: ^Texture_Mapping, uvindex: ^UInt, blend: ^Real, op: ^Texture_Op, mapmode: ^Texture_Map_Mode, flags: ^UInt) -> Return ---;
 
@@ -383,8 +383,8 @@ AABB :: struct {
         tangent: ^Vector_3d,
         bitangents: ^Vector_3d,
 
-        colors: ^[MAX_NUMBER_OF_COLOR_SETS]Color_4d,
-        texture_coords: ^[MAX_NUMBER_OF_TEXTURECOORDS]Vector_3d,
+        colors: [MAX_NUMBER_OF_COLOR_SETS]^Color_4d,
+        texture_coords: [MAX_NUMBER_OF_TEXTURECOORDS]^Vector_3d,
 
         num_uv_components: [MAX_NUMBER_OF_TEXTURECOORDS]UInt,
 
@@ -650,7 +650,7 @@ AABB :: struct {
 
 //#include "postprocess.h"
 // ------------------------------------------------------------
-    Post_Process_Steps :: enum {
+    Post_Process_Steps :: enum u32 {
         Calc_Tangent_Space = 0x1,
         Join_Identical_Vertices = 0x2,
         Make_Left_Handed = 0x4,
@@ -693,11 +693,11 @@ AABB :: struct {
         Transformation: Matrix_4d,
         parent: ^Node,
         children: C_Vector(^Node),
-        meshes: C_Vector(^Mesh),
+        meshes: C_Vector(UInt),
         metadata: ^Metadata
     }
 
-    Scene_Flags :: enum {
+    Scene_Flags :: enum u32 {
         Incomplete = 0x01,
         Validated = 0x02,
         Validation_Warning = 0x04,
