@@ -3,6 +3,7 @@ package assimp
 import "core:os"
 import "core:c"
 import "core:strings"
+import "core:mem"
 
 when os.OS == "darwin" do foreign import lib "system:assimp";
 when os.OS == "windows" do foreign import lib "assimp-vc141-mt.lib";
