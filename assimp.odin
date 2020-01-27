@@ -96,8 +96,8 @@ foreign lib {
     @(link_name="aiGetMaterialColor")                   get_material_color :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, color_out: Color_4d) -> Return ---;
     @(link_name="aiGetMaterialUVTransform")             get_material_uv_transform :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, uv_transform_out: ^UV_Transform) -> Return ---;
     @(link_name="aiGetMaterialString")                  get_material_string :: proc(mat: ^Material, key: cstring, texture_type: Texture_Type, index: UInt, string_out: ^String) -> Return ---;
-    @(link_name="aiGetMaterialTextureCount")            get_material_texture_count :: proc(mat: ^Material, texture_type: ^Texture_Type) -> UInt ---;
-    @(link_name="aiGetMaterialTexture")                 get_material_texture :: proc(mat: ^Material, texture_type: ^Texture_Type, index: UInt, path: ^String, mapping: ^Texture_Mapping, uvindex: ^UInt, blend: ^Real, op: ^Texture_Op, mapmode: ^Texture_Map_Mode, flags: ^UInt) -> Return ---;
+    @(link_name="aiGetMaterialTextureCount")            get_material_texture_count :: proc(mat: ^Material, texture_type: Texture_Type) -> UInt ---;
+    @(link_name="aiGetMaterialTexture")                 get_material_texture :: proc(mat: ^Material, texture_type: Texture_Type, index: UInt, path: ^String, mapping: ^Texture_Mapping, uvindex: ^UInt, blend: ^Real, op: ^Texture_Op, mapmode: ^Texture_Map_Mode, flags: ^UInt) -> Return ---;
 
     // version.h
     @(link_name="aiGetLegalString")         get_legal_string :: proc() -> cstring ---;
