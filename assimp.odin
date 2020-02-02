@@ -232,7 +232,7 @@ C_Vector :: struct(Data: typeid) {
         data: [STRING_MAX_LENGTH]Char
     }
 
-    Return :: enum {
+    Return :: enum i32 {
         Success = 0x00,
         Failure = -0x01,
         Out_Of_Memory = -0x03,
